@@ -502,10 +502,10 @@ public class AllIssuesFragment extends Fragment {
                     magazinesList.get(i).status = Magazine.STATUS_DOWNLOAD;
                 }
 
-                if(!magazinesList.get(i).paymentProvider.equalsIgnoreCase("google") || !magazinesList.get(i).paymentProvider.trim().equalsIgnoreCase("free")
+                /*if(!magazinesList.get(i).paymentProvider.equalsIgnoreCase("google") || !magazinesList.get(i).paymentProvider.trim().equalsIgnoreCase("free")
                         && magazinesList.get(i).type.trim().equalsIgnoreCase("subscription")){
                     magazinesList.remove(magazinesList.get(i));
-                }
+                }*/
 
             }
         }else{
@@ -514,6 +514,7 @@ public class AllIssuesFragment extends Fragment {
 
 
             AllDownloadsDataSet mDbReader = new AllDownloadsDataSet(BaseApp.getContext());
+
             if (mDbReader != null) {
 
                 boolean isExists = mDbReader.isTableExists(mDbReader.getReadableDatabase(), BrandedSQLiteHelper.TABLE_ALL_DOWNLOADS);
@@ -761,6 +762,7 @@ public class AllIssuesFragment extends Fragment {
                     issuePriceButton = (MultiStateButton) v.findViewById(R.id.gridMultiStateButton);
 
                     // check if price/View/Download
+
                     issuePriceButton.setButtonState(magazinesList.get(position));
                     //            issuePriceButton.setAsPurchase(magazinesList.get(position).price);
 
@@ -1042,20 +1044,34 @@ public class AllIssuesFragment extends Fragment {
         protected String doInBackground(String... params) {
             // TODO: attempt authentication against a network service.
 
+            Log.e("Issue Coordinates ==> ","1,2,3,4");
             String resultToDisplay = "";
 
             try {
 
+
+
+
+
                 issueId = String.valueOf(magazinesList.get(position).id);
+
+
 
                 GetIssue getIssue = new GetIssue();
                 getIssue.init(issueId);
+
+
+
+
+
 
                 GetDocumentKey getDocumentKey = new GetDocumentKey();
                 documentKey = getDocumentKey.init(UserPrefs.getUserEmail(), UserPrefs.getUserPassword(), UserPrefs.getDeviceID(),
                         issueId,Config.Magazine_Number, Config.Bundle_ID);
 
                 Log.d(TAG, "Document key when download button clicked is : " + documentKey);
+
+
 
                 if(documentKey != null){
                     Log.d(TAG,"Inside the document key not null");
@@ -1065,6 +1081,7 @@ public class AllIssuesFragment extends Fragment {
 
             }catch (Exception e){
                 e.printStackTrace();
+
             }
             return resultToDisplay;
 

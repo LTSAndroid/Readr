@@ -150,15 +150,26 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
             }
 
             billingMagazinesList = new ArrayList<Magazine>();
+            ArrayList<Magazine> freeMagazineList = new ArrayList<Magazine>();
             biilingSubscriptionList = new ArrayList<Subscription>();
 
             if(pixelmagsMagazinesList != null) {
 
                 for (int i = 0; i < pixelmagsMagazinesList.size(); i++) {
                     String SKU = pixelmagsMagazinesList.get(i).android_store_sku;
+                    String paymentProvider = pixelmagsMagazinesList.get(i).paymentProvider;
+
                     Log.d(TAG,"Type of magazine list is : "+pixelmagsMagazinesList.get(i).type);
                     Log.d(TAG,"SKU is : "+SKU);
                     Log.d(TAG,"Inventory is : "+inventory);
+
+
+                    if(paymentProvider.equalsIgnoreCase("free")){
+                        Log.e("DOne","Done");
+
+                        freeMagazineList.add(pixelmagsMagazinesList.get(i));
+                    }
+
 
                     if (inventory.hasDetails(SKU)) //yet to be changed,this is for billing test
                     {
@@ -235,8 +246,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
                 // Save the Magazine Objects into the SQlite DB
 
-                if(billingMagazinesList.size() != 0) {
 
+
+                if(billingMagazinesList.size() != 0) {
+                    billingMagazinesList.addAll(freeMagazineList);
                     billingMagazinesList = DownloadThumbnails.DownloadAllThumbnailData(billingMagazinesList);
 
                     AllIssuesDataSet mDbHelper = new AllIssuesDataSet(BaseApp.getContext());
@@ -491,7 +504,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                });
 
 
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
+        mHelper.startSetup(
+                new IabHelper.OnIabSetupFinishedListener()
         {
             public void onIabSetupFinished(IabResult result)
             {

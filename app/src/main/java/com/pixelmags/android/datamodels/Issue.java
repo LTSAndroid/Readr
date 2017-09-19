@@ -21,6 +21,9 @@ public class Issue
     public String created;
     public String lastModified;
     public String media_format;
+    public String region;
+
+
 
     public ArrayList<Page> pages;
 

@@ -4,14 +4,14 @@
     android:layout_height="match_parent"
     android:background="@color/splash_screen_color"
     android:orientation="vertical"
-    tools:context="com.pixelmags.android.pixelmagsapp.LaunchActivity">
+    tools:context="com.pixelmags.androidbranded.activity.LaunchActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/splash_android_portrait" />
+
+
+        android:background="@drawable/splash_portrait" />
 
 <!--
 <ImageView android:layout_width="fill_parent"

@@ -1,17 +1,22 @@
 package com.pixelmags.android.api;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.pixelmags.android.comms.Config;
 import com.pixelmags.android.comms.WebRequest;
 import com.pixelmags.android.download.QueueDownload;
 import com.pixelmags.android.json.GetIssueParser;
+
 import com.pixelmags.android.pixelmagsapp.service.PMService;
 import com.pixelmags.android.storage.IssueDataSet;
 import com.pixelmags.android.storage.UserPrefs;
 import com.pixelmags.android.util.BaseApp;
 
 import okhttp3.FormBody;
+
+import static android.content.Context.MODE_PRIVATE;
 
 //import org.apache.http.NameValuePair;
 //import org.apache.http.message.BasicNameValuePair;
@@ -36,6 +41,7 @@ public class GetIssue extends WebRequest
         return failure;
     }
 
+
     public void init(String issueID)
     {
 
@@ -44,7 +50,7 @@ public class GetIssue extends WebRequest
         setApiNameValuePairs();
         doPostRequest();
 
-//        System.out.println("RESPONSE CODE "+responseCode+" data::" +getAPIResultData());
+        System.out.println("RESPONSE CODE "+responseCode+" data::" +getAPIResultData());
 
         if(responseCode==200){
             getIssueParser = new GetIssueParser(getAPIResultData());
@@ -55,6 +61,8 @@ public class GetIssue extends WebRequest
                 if(getIssueParser.isSuccess()){
                     getIssueParser.parse();
                     failure = false;
+
+
                     saveIssueToApp();
 
 
@@ -85,6 +93,15 @@ public class GetIssue extends WebRequest
                 .add("api_version", Config.api_version)
 
                 .build();
+        Log.e("auth_email_address", UserPrefs.getUserEmail());
+        Log.e("auth_password", UserPrefs.getUserPassword());
+        Log.e("device_id", UserPrefs.getDeviceID());
+        Log.e("magazine_id", Config.Magazine_Number);
+        Log.e("issue_id", mIssueID);
+        Log.e("app_bundle_id", Config.Bundle_ID);
+        Log.e("api_mode", Config.api_mode);
+        Log.e("api_version", Config.api_version);
+
 
 //        baseApiNameValuePairs = new ArrayList<NameValuePair>(8);
 //        baseApiNameValuePairs.add(new BasicNameValuePair("auth_email_address", UserPrefs.getUserEmail()));
@@ -107,6 +124,7 @@ public class GetIssue extends WebRequest
             Log.d(TAG, "Get issue parser of Issue is :" + getIssueParser.mIssue.toString());
 
             mDbHelper.insertIssueData(mDbHelper.getWritableDatabase(), getIssueParser.mIssue);
+
             mDbHelper.close();
 
             // Saving Object into All Download Data Set . change by Likith
@@ -137,6 +155,8 @@ public class GetIssue extends WebRequest
         return queueIssue.insertIssueInDownloadQueue(issueId);
 
     }
+
+
 
 
 }
