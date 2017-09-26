@@ -78,20 +78,15 @@ public class NewArrivalFragment extends Fragment implements KittenClickListener 
     }
 
     @Override
-    public void onKittenClicked(MagazineAdapter.SingleItemRowHolder holder, int position) {
-        int kittenNumber = (position % 6) + 1;
-        DetailsFragment kittenDetails = DetailsFragment.newInstance(kittenNumber);
+    public void onKittenClicked(MagazineAdapter.SingleItemRowHolder holder, int position,Magazine magazine) {
 
-        // Note that we need the API version check here because the actual transition classes (e.g. Fade)
-        // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
-        // ARE available in the support library (though they don't do anything on API < 21)
+        DetailsFragment kittenDetails = DetailsFragment.newInstance(magazine);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             kittenDetails.setSharedElementEnterTransition(new DetailsTransition());
             kittenDetails.setEnterTransition(new Fade());
             setExitTransition(new Fade());
             kittenDetails.setSharedElementReturnTransition(new DetailsTransition());
         }
-
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .addSharedElement(holder.itemImage, "kittenImage")

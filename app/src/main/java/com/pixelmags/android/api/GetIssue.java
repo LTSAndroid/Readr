@@ -42,8 +42,7 @@ public class GetIssue extends WebRequest
     }
 
 
-    public void init(String issueID)
-    {
+    public void init(String issueID) {
 
         mIssueID = issueID;
 
@@ -55,24 +54,17 @@ public class GetIssue extends WebRequest
         if(responseCode==200){
             getIssueParser = new GetIssueParser(getAPIResultData());
             if(getIssueParser.initJSONParse()){
-
                 Log.d(TAG," value of is success is : "+getIssueParser.isSuccess());
-
                 if(getIssueParser.isSuccess()){
                     getIssueParser.parse();
                     failure = false;
 
-
                     saveIssueToApp();
 
-
                 } else{
-
                     Log.d(TAG,"Inside the error condition");
-
                     // Add error handling code here
                     failure = true;
-
                 }
 
             }
@@ -81,6 +73,8 @@ public class GetIssue extends WebRequest
     }
 
     private void setApiNameValuePairs(){
+
+
 
         requestBody = new FormBody.Builder()
                 .add("auth_email_address", UserPrefs.getUserEmail())
@@ -93,6 +87,8 @@ public class GetIssue extends WebRequest
                 .add("api_version", Config.api_version)
 
                 .build();
+
+
         Log.e("auth_email_address", UserPrefs.getUserEmail());
         Log.e("auth_password", UserPrefs.getUserPassword());
         Log.e("device_id", UserPrefs.getDeviceID());
@@ -103,15 +99,7 @@ public class GetIssue extends WebRequest
         Log.e("api_version", Config.api_version);
 
 
-//        baseApiNameValuePairs = new ArrayList<NameValuePair>(8);
-//        baseApiNameValuePairs.add(new BasicNameValuePair("auth_email_address", UserPrefs.getUserEmail()));
-//        baseApiNameValuePairs.add(new BasicNameValuePair("auth_password", UserPrefs.getUserPassword()));
-//        baseApiNameValuePairs.add(new BasicNameValuePair("device_id", UserPrefs.getDeviceID()));
-//        baseApiNameValuePairs.add(new BasicNameValuePair("magazine_id", Config.Magazine_Number));
-//        baseApiNameValuePairs.add(new BasicNameValuePair("issue_id", mIssueID));
-//        baseApiNameValuePairs.add(new BasicNameValuePair("app_bundle_id", Config.Bundle_ID));
-//        baseApiNameValuePairs.add(new BasicNameValuePair("api_mode", Config.api_mode));
-//        baseApiNameValuePairs.add(new BasicNameValuePair("api_version", Config.api_version));
+
     }
 
     private void saveIssueToApp(){
@@ -120,17 +108,9 @@ public class GetIssue extends WebRequest
         try {
             // Save the Subscription Objects into the SQlite DB
             IssueDataSet mDbHelper = new IssueDataSet(BaseApp.getContext());
-
-            Log.d(TAG, "Get issue parser of Issue is :" + getIssueParser.mIssue.toString());
-
             mDbHelper.insertIssueData(mDbHelper.getWritableDatabase(), getIssueParser.mIssue);
-
             mDbHelper.close();
 
-            // Saving Object into All Download Data Set . change by Likith
-
-//        QueueDownload queueDownload = new QueueDownload();
-//        queueDownload.insertIssueInDownloadQueue(String.valueOf(getIssueParser.mIssue.issueID));
 
             boolean result = startIssueDownload(String.valueOf(getIssueParser.mIssue.issueID));
 

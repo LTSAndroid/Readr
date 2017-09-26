@@ -34,14 +34,9 @@ public class QueueDownload {
                 mDownloadsDbReader.close();
 
                 if(result){
-
                     //move the issue thumbnail inside the Issue Download Thumbnail folder
                     DownloadThumbnails.copyThumbnailOfIssueDownloaded(String.valueOf(mIssue.issueID));
-
-                    //TODO :- Remove this thumbnail on delete
-
                 }
-
                 return result;
 
             }

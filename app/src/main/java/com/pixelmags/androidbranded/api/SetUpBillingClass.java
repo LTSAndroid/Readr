@@ -57,10 +57,8 @@ public class SetUpBillingClass {
 
                                                 if(paymentProvider.equalsIgnoreCase("free")){
                                                     Log.e("DOne","Done");
-
                                                     freeMagazineList.add(from.get(i));
                                                 }
-
 
                                                 if (inventory.hasDetails(SKU)){
                                                     SkuDetails details = inventory.getSkuDetails(SKU);

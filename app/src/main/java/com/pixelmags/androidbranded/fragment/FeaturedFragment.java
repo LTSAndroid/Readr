@@ -18,6 +18,7 @@ import com.pixelmags.android.datamodels.Magazine;
 import com.pixelmags.android.pixelmagsapp.R;
 import com.pixelmags.androidbranded.adapter.MagazineAdapter;
 import com.pixelmags.androidbranded.api.GetFeaturedIssuese;
+import com.pixelmags.androidbranded.download.DetailsTransition;
 import com.pixelmags.androidbranded.download.KittenClickListener;
 import java.util.ArrayList;
 
@@ -103,6 +104,7 @@ public class FeaturedFragment extends Fragment implements KittenClickListener{
         init(v);
         return v;
     }
+
     public void init(View v){
         recyclerViewList = (RecyclerView)v.findViewById(R.id.recycler_view_list);
         recyclerViewList.setHasFixedSize(true);
@@ -124,8 +126,30 @@ public class FeaturedFragment extends Fragment implements KittenClickListener{
 
 
     @Override
-    public void onKittenClicked(MagazineAdapter.SingleItemRowHolder holder, int position) {
-        Toast.makeText(getActivity(), "A", Toast.LENGTH_SHORT).show();
+    public void onKittenClicked(MagazineAdapter.SingleItemRowHolder holder, int position,Magazine magazine) {
+
+        Log.e("Data Fetured",magazine.toString());
+
+        DetailsFragment kittenDetails = DetailsFragment.newInstance(magazine);
+
+        // Note that we need the API version check here because the actual transition classes (e.g. Fade)
+        // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
+        // ARE available in the support library (though they don't do anything on API < 21)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            kittenDetails.setSharedElementEnterTransition(new DetailsTransition());
+            kittenDetails.setEnterTransition(new Fade());
+            setExitTransition(new Fade());
+            kittenDetails.setSharedElementReturnTransition(new DetailsTransition());
+        }
+
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(holder.itemImage, "kittenImage")
+                .replace(R.id.container, kittenDetails)
+                .addToBackStack(null)
+                .commit();
+
+
     }
 
 

@@ -871,6 +871,8 @@ public class AllIssuesFragment extends Fragment {
      * Represents an asynchronous task used to fetch all the issues.
      *
      */
+
+
     public class GetAllIssuesTask extends AsyncTask<String, String, String> {
 
         private final String mMagazineID;

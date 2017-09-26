@@ -1,12 +1,18 @@
 package com.pixelmags.androidbranded.adapter;
 
 /**
- * Created by sejeeth on 8/9/17.
+ * Created by sejeeth on 20/9/17.
  */
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +22,33 @@ import android.widget.Toast;
 
 
 import com.pixelmags.android.bean.MagazineBeanMain;
+import com.pixelmags.android.comms.Config;
 import com.pixelmags.android.datamodels.Magazine;
 import com.pixelmags.android.pixelmagsapp.R;
+import com.pixelmags.android.storage.UserPrefs;
+import com.pixelmags.android.ui.AllIssuesFragment;
+import com.pixelmags.android.ui.LoginFragment;
+import com.pixelmags.android.util.GetInternetStatus;
+import com.pixelmags.androidbranded.bean.DownloadInterFace;
 import com.pixelmags.androidbranded.bean.RecyclerViewClick;
 import com.pixelmags.androidbranded.download.KittenClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.SingleItemRowHolder> {
+public class DetailMagzineAdapter extends RecyclerView.Adapter<DetailMagzineAdapter.SingleItemRowHolder> {
 
     private ArrayList<Magazine> itemsList;
     private Context mContext;
-    private static KittenClickListener itemListener;
+    AllIssuesFragment.DownloadPreviewImagesAsyncTask mPreviewImagesTask;
+    private static DownloadInterFace itemListener;
 
 
-    public MagazineAdapter(Context context, ArrayList<Magazine> itemsList,KittenClickListener kittenClickListener) {
+
+    public DetailMagzineAdapter(Context context, ArrayList<Magazine> itemsList,DownloadInterFace interFace) {
         this.itemsList = itemsList;
         this.mContext = context;
-        this.itemListener = kittenClickListener;
+        this.itemListener = interFace;
     }
 
     @Override
@@ -58,10 +72,18 @@ public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.Single
         holder.itemImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemListener.onKittenClicked((SingleItemRowHolder)holder, i,mag);
+
             }
         });
-       // MagazineBeanMain singleItem = itemsList.get(i);
+        holder.download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemListener.onKittenClicked(holder,i,mag,itemsList);
+
+
+            }
+        });
+
 
     }
 
@@ -74,7 +96,7 @@ public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.Single
     public class SingleItemRowHolder extends RecyclerView.ViewHolder {
 
         protected TextView tvTitle;
-
+        public TextView download;
         public ImageView itemImage;
 
 
@@ -83,6 +105,7 @@ public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.Single
 
             this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
             this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
+            this.download = (TextView)view.findViewById(R.id.download_issue);
 
 
            /* view.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +119,12 @@ public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.Single
 
 
         }
+
+    }
+
+
+    public void downloadButtonClicked(int position) {
+
 
     }
 

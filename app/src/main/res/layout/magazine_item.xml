@@ -46,6 +46,7 @@
                 />
 
             <TextView
+                android:id="@+id/download_issue"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:textColor="#007CFF"

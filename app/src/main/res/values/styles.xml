@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:typeface">serif</item>
+        <item name="android:typeface">normal</item>
         <item name="android:homeAsUpIndicator">@drawable/menu_icon</item>
     </style>
     )
