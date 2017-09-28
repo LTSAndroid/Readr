@@ -65,8 +65,6 @@ public class DownloadsManager {
     private boolean interrupted = false;
     private int totalPages;
     private double jumpPages = 0;
-    private ArrayList<AllDownloadsIssueTracker> allDownloadsIssuesListTracker = null;
-//    public static int issueIdCurrent = 0;
 
 
 
@@ -97,99 +95,6 @@ public class DownloadsManager {
     public static boolean downloadStatus(){
         return downloading;
     }
-
-    /**
-     *
-     * Represents an asynchronous task used to process the downloads table.
-     *
-     */
-    /*
-    public class QueueProcessorAsyncTask extends AsyncTask<String, String, Boolean> {
-
-        int MAX_THREADS = 3;
-        boolean runQueue = true;
-
-        QueueProcessorAsyncTask() {
-            queueTaskCompleted = false;
-        }
-
-        public void interruptQueueProcessorAsyncTask(){
-            // use later to pause, resume threads
-
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-
-            try {
-
-                queueTaskCompleted = false;
-
-                while(runQueue){
-
-                    DownloadSinglePageThreadStatic testEmpty = pageThreadQueue.peek(); // returns null if the queue is empty
-
-                    if(testEmpty == null) {
-                        runQueue = false;
-                        break;
-                    }
-
-                    ArrayList<Thread> allDownloadThreads = new ArrayList<Thread>();
-
-                    for (int i = 0; i < MAX_THREADS; i++) {
-
-                        // peek to check if the queue is empty
-                        DownloadSinglePageThreadStatic executeThread = pageThreadQueue.poll();
-
-                        if(executeThread == null) {
-                            break;
-                        }
-
-                        Thread t1 = new Thread(executeThread);
-                        allDownloadThreads.add(t1);
-                    }
-
-                    // start the threads
-                    for (Thread thread : allDownloadThreads){
-                        thread.start();
-                    }
-
-                    // wait for them to be completed
-                    try{
-
-                        for (Thread joinThread : allDownloadThreads){
-                            joinThread.join();
-                        }
-
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-
-                    // while loop ends
-                }
-                return true;
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-            return false;
-
-        }
-
-        protected void onPostExecute(Boolean result) {
-
-            System.out.println("<< Queue Tasks Completed >>");
-            queueTaskCompleted = true;
-        }
-
-        @Override
-        protected void onCancelled() {
-            mQueueProcessorTask = null;
-        }
-    }
-
-    */
 
 
     public static void updateAllPostDownloadsTable(AllDownloadsIssueTracker issueInQueue){
@@ -281,10 +186,13 @@ public class DownloadsManager {
 
 //        Log.d(TAG,"Process Download Table : "+queueTaskCompleted);
 //        Log.d(TAG,"Process Download Table queueTaskPaused :"+queueTaskPaused);
+
         if(!queueTaskCompleted && !queueTaskPaused){
             // queue is running, so just leave a notification and do nothing
             // priority downloads should take a different route
+
             setRequestPending();
+
             return true;
         }
 
@@ -312,6 +220,7 @@ public class DownloadsManager {
         try{
 
             issueToDownload = fetchAnyDownloadRunning();
+
             if(issueToDownload != null){
 
                 System.out.println("<<< ISSUE DOWNLOAD IN PROGRESS : "+ issueToDownload.issueTitle +" >>>");
@@ -319,8 +228,11 @@ public class DownloadsManager {
                 return issueToDownload;
             }
 
+
             AllDownloadsDataSet mDbReader = new AllDownloadsDataSet(BaseApp.getContext());
+
             boolean isExists = mDbReader.isTableExists(mDbReader.getWritableDatabase(), BrandedSQLiteHelper.TABLE_ALL_DOWNLOADS);
+
             if(isExists) {
                 issueToDownload = mDbReader.getNextIssueInQueue(mDbReader.getReadableDatabase(), Config.Magazine_Number);
                 mDbReader.close();
@@ -348,6 +260,7 @@ public class DownloadsManager {
         try{
             AllDownloadsDataSet mDbReader = new AllDownloadsDataSet(BaseApp.getContext());
             boolean isExists = mDbReader.isTableExists(mDbReader.getReadableDatabase(), BrandedSQLiteHelper.TABLE_ALL_DOWNLOADS);
+
             if(isExists) {
                 issueDownloadInProgress = mDbReader.getIssueDownloadInProgress(mDbReader.getReadableDatabase(), Config.Magazine_Number);
                 mDbReader.close();

@@ -18,7 +18,7 @@
         tools:context="com.pixelmags.android.ui.RegisterFragment">
 
 
-        <EditText
+        <!--ditText
             android:id="@+id/accountuserid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,15 +27,36 @@
             android:layout_marginBottom="6dp"
             android:background="@color/edit_text_background"
             android:ems="10"
-            android:hint="@string/hint_first_name"
+
             android:inputType="textCapSentences"
             android:minHeight="50dp"
             android:paddingLeft="6dp"
             android:paddingStart="6dp"
             android:textColor="@color/black"
-            android:textColorHint="@color/black"/>
+            android:textColorHint="@color/black"/>-->
 
-        <EditText
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/accountuserid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/apptheme_edit_text_holo_light"
+                android:hint="@string/hint_first_name"
+                android:cursorVisible="false"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black" />
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+
+
+
+
+
+      <!--  <EditText
             android:id="@+id/accountEmailid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,16 +70,39 @@
             android:paddingLeft="6dp"
             android:paddingStart="6dp"
             android:textColor="@color/black"
-            android:textColorHint="@color/black" />
+            android:textColorHint="@color/black" />-->
 
-         <!--<DatePicker
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:id="@+id/datePicker"
-             android:onClick="onPickdatebutton"
-            android:layout_below="@+id/registerLastName"
-            android:layout_centerHorizontal="true"
-            android:hint="@string/hint_last_name" />-->
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/accountEmailid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/apptheme_edit_text_holo_light"
+                android:hint="@string/hint_last_name"
+                android:cursorVisible="false"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black" />
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+
+
+
+
+
+
+
+        <!--<DatePicker
+           android:layout_width="150dp"
+           android:layout_height="45dp"
+           android:id="@+id/datePicker"
+            android:onClick="onPickdatebutton"
+           android:layout_below="@+id/registerLastName"
+           android:layout_centerHorizontal="true"
+           android:hint="@string/hint_last_name" />-->
 
         <requestFocus />
 
@@ -79,10 +123,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:background="@color/edit_text_background"
                 android:gravity="center_vertical"
                 android:hint="@string/hint_date_of_birth"
                 android:minHeight="50dp"
+                android:background="@drawable/apptheme_edit_text_holo_light"
                 android:paddingLeft="6dp"
                 android:paddingStart="6dp"
                 android:layout_weight="1"
@@ -96,7 +140,7 @@
                 android:id="@+id/pick_dob"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:background="@drawable/register_button_background"
+                android:background="@drawable/oval"
                 android:padding="3dp"
                 android:shadowColor="#3384ff"
                 android:shadowDx="0"
@@ -112,22 +156,38 @@
 
 
 
-        <EditText
+       <!-- <EditText
             android:id="@+id/accountName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:layout_marginTop="6dp"
             android:background="@color/edit_text_background"
-            android:hint="@string/hint_email"
+
             android:inputType="textEmailAddress"
             android:minHeight="50dp"
             android:paddingLeft="6dp"
             android:paddingStart="6dp"
             android:textColor="@color/black"
-            android:textColorHint="@color/black" />
-
+            android:textColorHint="@color/black" />-->
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <EditText
+            android:id="@+id/accountName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/apptheme_edit_text_holo_light"
+            android:hint="@string/hint_email"
+            android:cursorVisible="false"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black" />
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+
+    <!--<EditText
             android:id="@+id/registerPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,10 +203,26 @@
             android:paddingStart="6dp"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textColorHint="@color/black"/>
+            android:textColorHint="@color/black"/>-->
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/registerPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/apptheme_edit_text_holo_light"
+                android:hint="@string/hint_password"
+                android:cursorVisible="false"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black" />
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
 
-        <EditText
+      <!--  <EditText
             android:id="@+id/registerConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -154,14 +230,30 @@
             android:layout_alignStart="@+id/registerPassword"
             android:layout_below="@+id/registerPassword"
             android:background="@color/edit_text_background"
-            android:hint="@string/hint_confirm_password"
+
             android:inputType="textPassword"
             android:minHeight="50dp"
             android:paddingLeft="6dp"
             android:paddingStart="6dp"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textColorHint="@color/black" />
+            android:textColorHint="@color/black" />-->
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/registerConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/apptheme_edit_text_holo_light"
+                android:hint="@string/hint_confirm_password"
+                android:cursorVisible="false"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black" />
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
         <CheckBox
             android:id="@+id/registerAcceptTermsConditions"
@@ -182,7 +274,7 @@
             android:layout_below="@+id/registerAcceptTermsConditions"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
-            android:background="@drawable/register_button_background"
+            android:background="@drawable/oval"
             android:shadowColor="#3384ff"
             android:shadowDx="0"
             android:shadowDy="0"

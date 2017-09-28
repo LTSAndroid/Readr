@@ -30,7 +30,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion '25.0.0'
     defaultConfig {
-        applicationId 'com.pixelimages.readr.android'
+        applicationId 'com.pixelmags.androidbranded.ironman.ironman'
         minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
@@ -63,7 +63,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
 
-
+    compile 'com.wrapp.floatlabelededittext:library:0.0.6'
 
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.android.support:cardview-v7:22.2.1'

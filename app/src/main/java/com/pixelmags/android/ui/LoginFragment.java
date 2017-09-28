@@ -59,8 +59,8 @@ public class  LoginFragment extends Fragment {
     private ProgressDialog loginProgressDialog;
 
     /**
-    * getMyIssues() if Login success
-    */
+     * getMyIssues() if Login success
+     */
     private GetMyIssuesTask mGetMyIssuesTask = null;
 
     /**
@@ -116,6 +116,7 @@ public class  LoginFragment extends Fragment {
         // set the Log in Listener
         Button doLoginButton = (Button) rootView.findViewById(R.id.logInButton);
         doLoginButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 doLogin();
@@ -135,8 +136,8 @@ public class  LoginFragment extends Fragment {
 
     private void navigateToRegisterButton() {
 
-       // Intent a = new Intent(getActivity().getBaseContext(), LoginActivity.class);
-       //  startActivity(a);
+        // Intent a = new Intent(getActivity().getBaseContext(), LoginActivity.class);
+        //  startActivity(a);
 
 
         Fragment fragment = new RegisterFragment();
@@ -145,7 +146,7 @@ public class  LoginFragment extends Fragment {
         fragment.setArguments(args);
 
         FragmentManager fragmentManager = getFragmentManager();
-       // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         fragmentManager.beginTransaction()
                 .replace(((ViewGroup)(getView().getParent())).getId(), fragment)

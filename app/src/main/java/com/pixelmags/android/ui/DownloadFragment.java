@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -220,6 +221,7 @@ public class DownloadFragment extends Fragment {
                     mDbReader.close();
                 }
 
+                Log.e("Downloads List Size",allDownloadsIssuesListTracker.size()+"");
 
                 if(allDownloadsIssuesListTracker != null) {
 

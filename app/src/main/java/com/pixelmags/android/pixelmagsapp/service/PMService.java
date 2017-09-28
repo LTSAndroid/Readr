@@ -51,12 +51,7 @@ public class PMService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         System.out.println("PMService Started");
-
-        // delay this until the app has completely loaded
-        //initiateDownloadsProcessing();
-
         return START_STICKY;
     }
 
@@ -69,6 +64,7 @@ public class PMService extends Service {
     public void requestServiceShutdown(){
         stopSelf();
     }
+
 
     public void newDownloadRequested(){
 
@@ -88,6 +84,7 @@ public class PMService extends Service {
     private void initiateDownloadsProcessing(){
 
         // DMTaskCompleted is used to check if the Download task is still running;
+
         if(!DMTaskRunning)
         {
             Log.d(TAG,"Inside the if condition of DM Task running");

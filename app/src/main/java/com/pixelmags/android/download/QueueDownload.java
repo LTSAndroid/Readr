@@ -1,5 +1,7 @@
 package com.pixelmags.android.download;
 
+import android.util.Log;
+
 import com.pixelmags.android.datamodels.Issue;
 import com.pixelmags.android.storage.AllDownloadsDataSet;
 import com.pixelmags.android.storage.IssueDataSet;
@@ -21,23 +23,32 @@ public class QueueDownload {
     public boolean insertIssueInDownloadQueue(String issueId) {
 
         try{
+            Log.e("Issue Id Queue ==>",issueId);
 
             IssueDataSet mDbReader = new IssueDataSet(BaseApp.getContext());
+
             Issue mIssue = mDbReader.getIssue(mDbReader.getReadableDatabase(), issueId);
+
             mDbReader.close();
 
             if(mIssue != null){
+                Log.e("Issue Id Object ==>",mIssue.toString());
+
 
                 AllDownloadsDataSet mDownloadsDbReader = new AllDownloadsDataSet(BaseApp.getContext());
 
                 boolean result = mDownloadsDbReader.issueDownloadPreChecksAndDownload(mDownloadsDbReader.getWritableDatabase(), mIssue);
                 mDownloadsDbReader.close();
 
+
                 if(result){
-                    //move the issue thumbnail inside the Issue Download Thumbnail folder
+
                     DownloadThumbnails.copyThumbnailOfIssueDownloaded(String.valueOf(mIssue.issueID));
                 }
                 return result;
+
+            }else{
+                Log.e("Download Failure ==>","Here");
 
             }
 

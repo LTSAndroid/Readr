@@ -203,7 +203,6 @@ public class AllDownloadsDataSet extends BrandedSQLiteHelper {
             insertValues.put(AllDownloadsEntry.COLUMN_DOWNLOAD_STATUS, downloadStatus);
             insertValues.put(AllDownloadsEntry.COLUMN_PROGRESS_STATE, progressCount);
 
-
             boolean insertResult = insert_issue_for_download(db, insertValues);
 
             return insertResult;

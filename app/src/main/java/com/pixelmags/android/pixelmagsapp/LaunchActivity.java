@@ -60,7 +60,8 @@ public class LaunchActivity extends Activity {
     private class PreLaunchAppTask extends AsyncTask<String, String, String> {
 
 
-        GetIssues apiGetIssues;
+       // GetIssues apiGetIssues;
+
         GetSubscriptions apiGetSubs;
         ValidateUser apiValidateUser;
         GetMyIssues apiGetMyIssues;
@@ -90,8 +91,8 @@ public class LaunchActivity extends Activity {
             //Phase 1 - Get All issues and Subs for app
             try {
 
-                apiGetIssues = new GetIssues();
-                apiGetIssues.init(Config.Magazine_Number, Config.Bundle_ID);
+               /* apiGetIssues = new GetIssues();
+                apiGetIssues.init(Config.Magazine_Number, Config.Bundle_ID);*/
 
                 apiGetSubs = new GetSubscriptions();
                 apiGetSubs.init();

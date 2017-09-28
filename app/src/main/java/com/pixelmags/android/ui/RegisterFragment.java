@@ -201,30 +201,10 @@ public class RegisterFragment extends Fragment {
     }
 
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -384,7 +364,7 @@ public class RegisterFragment extends Fragment {
         // Insert the fragment by replacing any existing fragment
         FragmentManager allIssuesFragmentManager = getFragmentManager();
         allIssuesFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_container, fragmentAllIsuues)
+                .replace(R.id.container, fragmentAllIsuues)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
 

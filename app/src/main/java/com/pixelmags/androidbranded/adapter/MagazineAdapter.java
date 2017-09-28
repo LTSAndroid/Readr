@@ -48,6 +48,8 @@ public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.Single
     public void onBindViewHolder(final SingleItemRowHolder holder, final int i) {
         ViewCompat.setTransitionName(holder.itemImage, String.valueOf(i) + "_image");
         holder.tvTitle.setText(itemsList.get(i).title);
+        //holder.download.setText("\\u20B9 "+itemsList.get(i).price);
+        holder.download.setText("\u20B9 "+itemsList.get(i).price);
         final Magazine mag = itemsList.get(i);
 
         Picasso.with(mContext)
@@ -74,7 +76,7 @@ public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.Single
     public class SingleItemRowHolder extends RecyclerView.ViewHolder {
 
         protected TextView tvTitle;
-
+        public TextView download;
         public ImageView itemImage;
 
 
@@ -83,9 +85,9 @@ public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.Single
 
             this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
             this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
+            this.download = (TextView)view.findViewById(R.id.download_issue);
 
-
-           /* view.setOnClickListener(new View.OnClickListener() {
+            /* view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 

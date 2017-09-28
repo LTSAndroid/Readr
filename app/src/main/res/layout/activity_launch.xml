@@ -2,21 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/splash_screen_color"
-    android:orientation="vertical"
-    tools:context="com.pixelmags.androidbranded.activity.LaunchActivity">
+    android:background="@color/orange"
+    android:orientation="vertical">
 
-    <ImageView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-
-        android:background="@drawable/splash_portrait" />
-
-<!--
-<ImageView android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:src="@drawable/splash_android_portrait" />
--->
+        android:text="Readr"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="@color/white"/>
 
 </RelativeLayout>

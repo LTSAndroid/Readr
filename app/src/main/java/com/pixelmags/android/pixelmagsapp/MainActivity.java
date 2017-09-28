@@ -574,6 +574,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     public void onNavigationDrawerItemSelected(int position)
     {
         // update the main content by replacing fragments
+
+        Log.e("update the main content by replacing fragments","update the main content by replacing fragments");
+
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))

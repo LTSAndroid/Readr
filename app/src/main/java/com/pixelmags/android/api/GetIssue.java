@@ -58,12 +58,8 @@ public class GetIssue extends WebRequest
                 if(getIssueParser.isSuccess()){
                     getIssueParser.parse();
                     failure = false;
-
                     saveIssueToApp();
-
-                } else{
-                    Log.d(TAG,"Inside the error condition");
-                    // Add error handling code here
+                }else{
                     failure = true;
                 }
 
@@ -74,9 +70,7 @@ public class GetIssue extends WebRequest
 
     private void setApiNameValuePairs(){
 
-
-
-        requestBody = new FormBody.Builder()
+        /*  requestBody = new FormBody.Builder()
                 .add("auth_email_address", UserPrefs.getUserEmail())
                 .add("auth_password", UserPrefs.getUserPassword())
                 .add("device_id", UserPrefs.getDeviceID())
@@ -86,39 +80,32 @@ public class GetIssue extends WebRequest
                 .add("api_mode", Config.api_mode)
                 .add("api_version", Config.api_version)
 
-                .build();
-
-
-        Log.e("auth_email_address", UserPrefs.getUserEmail());
-        Log.e("auth_password", UserPrefs.getUserPassword());
-        Log.e("device_id", UserPrefs.getDeviceID());
-        Log.e("magazine_id", Config.Magazine_Number);
-        Log.e("issue_id", mIssueID);
-        Log.e("app_bundle_id", Config.Bundle_ID);
-        Log.e("api_mode", Config.api_mode);
-        Log.e("api_version", Config.api_version);
+                .build();*/
+        requestBody = new FormBody.Builder()
+                .add("auth_email_address", "sejeeth.dreambooking@gmail.com")
+                .add("auth_password", "postpone")
+                .add("device_id", "000000000000000")
+                .add("magazine_id", "825")
+                .add("issue_id", "127615")
+                .add("app_bundle_id", "com.pixelmags.reader.managed.google.ironman-iron-man-mag")
+                .add("api_mode", Config.api_mode)
+                .add("api_version", Config.api_version)
+               .build();
 
 
 
     }
 
     private void saveIssueToApp(){
-
-
         try {
-            // Save the Subscription Objects into the SQlite DB
+
             IssueDataSet mDbHelper = new IssueDataSet(BaseApp.getContext());
             mDbHelper.insertIssueData(mDbHelper.getWritableDatabase(), getIssueParser.mIssue);
             mDbHelper.close();
-
-
-            boolean result = startIssueDownload(String.valueOf(getIssueParser.mIssue.issueID));
-
-            Log.d(TAG, "Result of queue download insert is : " + result);
+            boolean result = startIssueDownload(String.valueOf("127615"));
 
             if (result) {
 
-                Log.d(TAG, "Inside the if condition of notify service of new download");
                 PMService pmService = new PMService();
                 pmService.newDownloadRequested();
             }

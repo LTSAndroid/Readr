@@ -148,7 +148,6 @@ public class AllIssuesFragment extends Fragment {
                 .setCancelable(false)
                 .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         dialog.dismiss();
 
                     }
@@ -1056,24 +1055,14 @@ public class AllIssuesFragment extends Fragment {
 
 
                 issueId = String.valueOf(magazinesList.get(position).id);
-
-
-
                 GetIssue getIssue = new GetIssue();
                 getIssue.init(issueId);
-
-
-
-
-
-
                 GetDocumentKey getDocumentKey = new GetDocumentKey();
                 documentKey = getDocumentKey.init(UserPrefs.getUserEmail(), UserPrefs.getUserPassword(), UserPrefs.getDeviceID(),
                         issueId,Config.Magazine_Number, Config.Bundle_ID);
 
+
                 Log.d(TAG, "Document key when download button clicked is : " + documentKey);
-
-
 
                 if(documentKey != null){
                     Log.d(TAG,"Inside the document key not null");

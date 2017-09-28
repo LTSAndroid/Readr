@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
@@ -41,6 +42,11 @@ import com.pixelmags.androidbranded.api.GetDetailsandMagazine;
 import com.pixelmags.androidbranded.bean.DownloadInterFace;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 
@@ -94,7 +100,9 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
         recyclerViewList = (RecyclerView)view.findViewById(R.id.recycler_view_details);
         Bundle args = getArguments();
         Magazine kittenNumber = args.getParcelable(ARG_KITTEN_NUMBER);
-        Log.e("Kitten",kittenNumber.toString());
+
+
+
 
         if(kittenNumber != null) {
             Picasso.with(getActivity())
@@ -106,7 +114,6 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
             getFeaturedArrivalsTask.execute();
 
         }else{
-            Log.e("Bean Error","***********");
 
         }
 
@@ -194,17 +201,6 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
 
             try{
                 if(previewImageArrayList != null){
-
-                   /* Log.e("Image Preview Table ","Table Name of the preview Image is : "+"Preview_Issue_Table_"+magID+mIssueID);
-
-                    SingleIssuePreviewDataSet mDbDownloadTableWriter = new SingleIssuePreviewDataSet(BaseApp.getContext());
-
-                    boolean resultInsertion = mDbDownloadTableWriter.initFormationOfSingleIssueDownloadTable(mDbDownloadTableWriter.getWritableDatabase(),
-                            "Preview_Issue_Table_"+magID+mIssueID, previewImageArrayList);
-
-                    mDbDownloadTableWriter.close();*/
-
-
                     DownloadIssue downloadIssue;
                     downloadIssue = new DownloadIssue(position);
                     downloadIssue.execute((String) null);
@@ -279,26 +275,28 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
                         .show();*/
                 Toast.makeText(getActivity(),"Download Failed",Toast.LENGTH_LONG).show();
 
+
+
             }else{
                 Toast.makeText(getActivity(),"Download started",Toast.LENGTH_LONG).show();
 
+               // exportDB();
 
 
-
-               /* new AlertDialog.Builder(getActivity())
+               new AlertDialog.Builder(getActivity())
                         .setTitle("Issue Download!")
                         .setMessage("You can view your Issue in download section.")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                *//*currentPage =getString(R.string.menu_title_downloads);*//*
+                                //currentPage =getString(R.string.menu_title_downloads);*//*
 
 
                                 Fragment fragmentDownload = new DownloadFragment();
                                 // Insert the fragment by replacing any existing fragment
-                                FragmentManager allIssuesFragmentManager = getFragmentManager();
+                                FragmentManager allIssuesFragmentManager = getActivity().getSupportFragmentManager();
                                 allIssuesFragmentManager.beginTransaction()
-                                        .replace(R.id.main_fragment_container, fragmentDownload,"DownloadFragment")
+                                        .replace(R.id.container, fragmentDownload,"DownloadFragment")
                                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                         //       .addToBackStack(null)
                                         .commit();
@@ -314,7 +312,7 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();*/
+                        .show();
             }
 
 
@@ -324,6 +322,31 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
         }
 
 
+    }
+
+
+    private void exportDB(){
+
+
+        File sd = Environment.getExternalStorageDirectory();
+        File data = Environment.getDataDirectory();
+        FileChannel source=null;
+        FileChannel destination=null;
+        String currentDBPath = "/data/"+ getActivity().getPackageName() +"/databases/"+"BrandedDatabase.db";
+        String backupDBPath = "Readr.db";
+        File currentDB = new File(data, currentDBPath);
+        File backupDB = new File(sd, backupDBPath);
+        try {
+            source = new FileInputStream(currentDB).getChannel();
+            destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            source.close();
+            destination.close();
+            Toast.makeText(getActivity(), "DB Exported!", Toast.LENGTH_LONG).show();
+
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
