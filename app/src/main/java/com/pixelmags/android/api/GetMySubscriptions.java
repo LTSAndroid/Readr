@@ -67,6 +67,8 @@ public class GetMySubscriptions extends WebRequest {
 
                 .build();
 
+
+
 //        baseApiNameValuePairs = new ArrayList<NameValuePair>(6);
 //        baseApiNameValuePairs.add(new BasicNameValuePair("auth_email_address", UserPrefs.getUserEmail()));
 //        baseApiNameValuePairs.add(new BasicNameValuePair("auth_password", UserPrefs.getUserPassword()));

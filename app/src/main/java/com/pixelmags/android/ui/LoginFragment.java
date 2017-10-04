@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.pixelmags.android.api.GetMyIssues;
 import com.pixelmags.android.api.GetMySubscriptions;
@@ -123,7 +124,7 @@ public class  LoginFragment extends Fragment {
             }
         });
 
-        Button doRegisterButton = (Button) rootView.findViewById(R.id.registerButton);
+        TextView doRegisterButton = (TextView) rootView.findViewById(R.id.registerButton);
         doRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,7 +273,7 @@ public class  LoginFragment extends Fragment {
                     fragment.setArguments(bundle);
 
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_fragment_container, fragment, "HOME")
+                            .replace(R.id.container, fragment, "HOME")
                             .commit();
 
                     return true;
@@ -312,7 +313,7 @@ public class  LoginFragment extends Fragment {
         // Insert the fragment by replacing any existing fragment
         FragmentManager allIssuesFragmentManager = getFragmentManager();
         allIssuesFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_container, fragmentAllIsuues)
+                .replace(R.id.container, fragmentAllIsuues)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
 

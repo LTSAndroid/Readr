@@ -1,7 +1,6 @@
 package com.pixelmags.androidbranded.download;
 
 import android.support.v7.widget.RecyclerView;
-
 import com.pixelmags.android.IssueView.NewIssueView;
 import com.pixelmags.android.datamodels.Magazine;
 import com.pixelmags.androidbranded.adapter.MagazineAdapter;

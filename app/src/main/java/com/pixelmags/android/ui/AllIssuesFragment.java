@@ -15,6 +15,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -47,6 +50,7 @@ import com.pixelmags.android.storage.UserPrefs;
 import com.pixelmags.android.ui.uicomponents.MultiStateButton;
 import com.pixelmags.android.util.BaseApp;
 import com.pixelmags.android.util.GetInternetStatus;
+import com.pixelmags.androidbranded.adapter.DetailMagzineAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -59,14 +63,13 @@ import io.fabric.sdk.android.Fabric;
 public class AllIssuesFragment extends Fragment {
 
     public static String currentPage;
-    public CustomGridAdapter gridAdapter;
+    public DetailMagzineAdapter gridAdapter;
     ArrayList<AllDownloadsIssueTracker> allDownloadsTracker;
     ArrayList<IssueDocumentKey> issueDocumentKeys;
     private ArrayList<Magazine> magazinesList = null;
     private GetAllIssuesTask mGetAllIssuesTask = null;
     private DownloadIssue downloadIssue = null;
     private String TAG = "AllIssuesFragment";
-    private MultiStateButton issuePriceButton;
     private String documentKey;
     private ProgressDialog progressBar;
     private DownloadPreviewImagesAsyncTask mPreviewImagesTask = null;
@@ -162,16 +165,19 @@ public class AllIssuesFragment extends Fragment {
        // set the Grid Adapter
 
        // use rootview to fetch view (when called from onCreateView) else null returns
-       GridView gridView = (GridView) rootView.findViewById(R.id.displayIssuesGridView);
-       gridAdapter = new CustomGridAdapter(getActivity());
+       RecyclerView gridView = (RecyclerView) rootView.findViewById(R.id.displayIssuesGridView);
+       gridView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+       gridAdapter = new DetailMagzineAdapter(getActivity());
        gridView.setAdapter(gridAdapter);
+
+
        //   gridview.setNumColumns(4);
 
    }
 
     public void updateButtonState(){
 
-        gridAdapter = new CustomGridAdapter(getActivity());
+        gridAdapter = new DetailMagzineAdapter(getActivity());
         gridAdapter.notifyDataSetChanged();
     }
 
@@ -222,7 +228,7 @@ public class AllIssuesFragment extends Fragment {
                                     // Insert the fragment by replacing any existing fragment
                                     FragmentManager allIssuesFragmentManager = getFragmentManager();
                                     allIssuesFragmentManager.beginTransaction()
-                                            .replace(R.id.main_fragment_container, fragmentLogin)
+                                            .replace(R.id.container, fragmentLogin)
                                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                             .commit();
                                 }
@@ -271,7 +277,7 @@ public class AllIssuesFragment extends Fragment {
                             // Insert the fragment by replacing any existing fragment
                             FragmentManager allIssuesFragmentManager = getFragmentManager();
                             allIssuesFragmentManager.beginTransaction()
-                                    .replace(R.id.main_fragment_container, fragmentLogin)
+                                    .replace(R.id.container, fragmentLogin)
                                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                     .commit();
                         }
@@ -340,7 +346,7 @@ public class AllIssuesFragment extends Fragment {
                             // Insert the fragment by replacing any existing fragment
                             FragmentManager allIssuesFragmentManager = getFragmentManager();
                             allIssuesFragmentManager.beginTransaction()
-                                    .replace(R.id.main_fragment_container, fragmentLogin)
+                                    .replace(R.id.container, fragmentLogin)
                                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                     .commit();
                         }
@@ -665,12 +671,210 @@ public class AllIssuesFragment extends Fragment {
     }
 
 
+
+
+
+
+    public class DetailMagzineAdapter extends RecyclerView.Adapter<DetailMagzineAdapter.SingleItemRowHolder> {
+        ArrayList<IssueDocumentKey> issueDocumentKeys;
+        private Context mContext;
+        public DetailMagzineAdapter(Context c) {
+            this.mContext = c;
+        }
+        @Override
+        public SingleItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.magazine_item, null);
+            SingleItemRowHolder mh = new SingleItemRowHolder(v);
+            return mh;
+        }
+
+        @Override
+        public void onBindViewHolder(final SingleItemRowHolder holder, final int position) {
+            ViewCompat.setTransitionName(holder.imageView, String.valueOf(position) + "_image");
+            if(magazinesList != null ) {
+                if (magazinesList.get(position).type.equalsIgnoreCase("issue")) {
+                    // Set the magazine image
+                    if (magazinesList.get(position).isThumbnailDownloaded) {
+                        if (magazinesList.get(position).thumbnailURL != null) {
+                            Picasso.with(mContext)
+                                    .load(magazinesList.get(position).thumbnailURL)
+                                    .placeholder(R.drawable.placeholder)
+                                    .error(R.drawable.placeholder)
+                                    .into(holder.imageView);
+                            holder.imageView.setTag(position);
+                            holder.imageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    gridIssueImageClicked((Integer) v.getTag());
+                                }
+                            });
+                        }
+                    }
+                    if(magazinesList != null){
+                        if (magazinesList.get(position).title != null) {
+                            holder.issueTitleText.setText(magazinesList.get(position).title);
+                        }
+                    }
+                    // check if price/View/Download
+                    holder.issuePriceButton.setButtonState(magazinesList.get(position));
+                    //            issuePriceButton.setAsPurchase(magazinesList.get(position).price);
+                    holder.issuePriceButton.setTag(position); // save the gridview index
+                    holder.issuePriceButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (magazinesList.get((Integer) v.getTag()).status == Magazine.STATUS_PRICE) {
+                                gridPriceButtonClicked((Integer) v.getTag());
+                            } else if (magazinesList.get((Integer) v.getTag()).status == Magazine.STATUS_QUEUE) {
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle("Issue download is in queue!")
+                                        .setMessage("You can view your Issue once download start.")
+                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                currentPage = getString(R.string.menu_title_downloads);
+
+                                                Fragment fragmentDownload = new DownloadFragment();
+                                                // Insert the fragment by replacing any existing fragment
+                                                FragmentManager allIssuesFragmentManager = getFragmentManager();
+                                                allIssuesFragmentManager.beginTransaction()
+                                                        .replace(R.id.container, fragmentDownload,"DownloadFragment")
+                                                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                                        //       .addToBackStack(null)
+                                                        .commit();
+
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .show();
+
+                            } else if (magazinesList.get((Integer) v.getTag()).status == Magazine.STATUS_PAUSED) {
+
+
+                            } else if (magazinesList.get((Integer) v.getTag()).status == Magazine.STATUS_DOWNLOAD) {
+
+                                downloadButtonClicked((Integer) v.getTag());
+
+                            } else if (magazinesList.get((Integer) v.getTag()).status == Magazine.STATUS_VIEW) {
+
+                                int pos = (int) v.getTag();
+                                String issueId = String.valueOf(magazinesList.get(pos).id);
+
+                                documentKey = getIssueDocumentKey(magazinesList.get(pos).id);
+
+                                Log.d(TAG, "Document key when view button click is : " + documentKey);
+
+                                Intent intent = new Intent(getActivity(), NewIssueView.class);
+                                intent.putExtra("issueId", issueId);
+                                intent.putExtra("documentKey", documentKey);
+                                startActivity(intent);
+
+                            }
+
+                        }
+                    });
+
+                }
+            }
+
+
+
+        }
+
+
+        @Override
+        public int getItemCount() {
+            if(magazinesList == null){
+                return 0;
+            }
+            return magazinesList.size();
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            return arg0;
+        }
+
+        public class SingleItemRowHolder extends RecyclerView.ViewHolder {
+
+            protected TextView issueTitleText;
+            public MultiStateButton issuePriceButton;
+            public ImageView imageView;
+
+
+            public SingleItemRowHolder(View view) {
+                super(view);
+
+                this.issueTitleText = (TextView) view.findViewById(R.id.gridTitleText);
+                this.imageView = (ImageView) view.findViewById(R.id.gridImage);
+                this.issuePriceButton = (MultiStateButton)view.findViewById(R.id.gridMultiStateButton);
+            }
+
+        }
+
+
+
+
+        public String getIssueDocumentKey(int issueId){
+
+            String issueKey = null;
+
+            MyIssueDocumentKey mDbReader = new MyIssueDocumentKey(BaseApp.getContext());
+            if(mDbReader != null) {
+                issueDocumentKeys = mDbReader.getMyIssuesDocumentKey(mDbReader.getReadableDatabase());
+                mDbReader.close();
+            }else{
+                mDbReader.close();
+            }
+
+            for(int i=0; i<issueDocumentKeys.size(); i++){
+                if(issueId == issueDocumentKeys.get(i).issueID){
+                    issueKey = issueDocumentKeys.get(i).documentKey;
+                }
+            }
+
+            return issueKey;
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
  *  A custom GridView to display the Magazines.
  *
  */
 
-    public class CustomGridAdapter extends BaseAdapter {
+   /* public class CustomGridAdapter extends BaseAdapter {
 
         ArrayList<IssueDocumentKey> issueDocumentKeys;
         private Context mContext;
@@ -758,11 +962,10 @@ public class AllIssuesFragment extends Fragment {
                     }
 
 
-                    issuePriceButton = (MultiStateButton) v.findViewById(R.id.gridMultiStateButton);
 
                     // check if price/View/Download
 
-                    issuePriceButton.setButtonState(magazinesList.get(position));
+                    holder.issuePriceButton.setButtonState(magazinesList.get(position));
                     //            issuePriceButton.setAsPurchase(magazinesList.get(position).price);
 
                     issuePriceButton.setTag(position); // save the gridview index
@@ -837,39 +1040,48 @@ public class AllIssuesFragment extends Fragment {
         }
 
 
-    @Override
-    public void notifyDataSetChanged(){
-        super.notifyDataSetChanged();
-    }
 
-    public String getIssueDocumentKey(int issueId){
 
-        String issueKey = null;
+    }*/
 
-        MyIssueDocumentKey mDbReader = new MyIssueDocumentKey(BaseApp.getContext());
-        if(mDbReader != null) {
-            issueDocumentKeys = mDbReader.getMyIssuesDocumentKey(mDbReader.getReadableDatabase());
-            mDbReader.close();
-        }else{
-            mDbReader.close();
-        }
 
-        for(int i=0; i<issueDocumentKeys.size(); i++){
-            if(issueId == issueDocumentKeys.get(i).issueID){
-                issueKey = issueDocumentKeys.get(i).documentKey;
-            }
-        }
 
-        return issueKey;
-    }
 
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      *
      * Represents an asynchronous task used to fetch all the issues.
      *
      */
+
+
 
 
     public class GetAllIssuesTask extends AsyncTask<String, String, String> {
@@ -1121,7 +1333,7 @@ public class AllIssuesFragment extends Fragment {
                                 // Insert the fragment by replacing any existing fragment
                                 FragmentManager allIssuesFragmentManager = getFragmentManager();
                                 allIssuesFragmentManager.beginTransaction()
-                                        .replace(R.id.main_fragment_container, fragmentDownload,"DownloadFragment")
+                                        .replace(R.id.container, fragmentDownload,"DownloadFragment")
                                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                                 //       .addToBackStack(null)
                                         .commit();

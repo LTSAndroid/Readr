@@ -13,10 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.pixelmags.android.bean.MagazineBeanMain;
 import com.pixelmags.android.datamodels.Magazine;
 import com.pixelmags.android.pixelmagsapp.R;
+import com.pixelmags.android.ui.AllIssuesFragment;
 import com.pixelmags.androidbranded.adapter.MagazineAdapter;
 import com.pixelmags.androidbranded.api.GetNewArival;
 import com.pixelmags.androidbranded.bean.PassNewArrival;
@@ -79,18 +81,29 @@ public class NewArrivalFragment extends Fragment implements KittenClickListener 
 
     @Override
     public void onKittenClicked(MagazineAdapter.SingleItemRowHolder holder, int position,Magazine magazine) {
+        Toast.makeText(getActivity(),"New Arrival Here",Toast.LENGTH_LONG).show();
 
-        DetailsFragment kittenDetails = DetailsFragment.newInstance(magazine);
+        Log.e("Data Fetured",magazine.toString());
+
+        Fragment fragmentAllIsuues = new AllIssuesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("Update", "Success");
+        fragmentAllIsuues.setArguments(bundle);
+
+        // Note that we need the API version check here because the actual transition classes (e.g. Fade)
+        // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
+        // ARE available in the support library (though they don't do anything on API < 21)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            kittenDetails.setSharedElementEnterTransition(new DetailsTransition());
-            kittenDetails.setEnterTransition(new Fade());
+            fragmentAllIsuues.setSharedElementEnterTransition(new DetailsTransition());
+            fragmentAllIsuues.setEnterTransition(new Fade());
             setExitTransition(new Fade());
-            kittenDetails.setSharedElementReturnTransition(new DetailsTransition());
+            fragmentAllIsuues.setSharedElementReturnTransition(new DetailsTransition());
         }
+
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .addSharedElement(holder.itemImage, "kittenImage")
-                .replace(R.id.container, kittenDetails)
+                .addSharedElement(holder.imageView, "kittenImage")
+                .replace(R.id.container, fragmentAllIsuues)
                 .addToBackStack(null)
                 .commit();
     }

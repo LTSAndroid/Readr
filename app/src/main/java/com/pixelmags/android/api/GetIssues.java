@@ -9,6 +9,9 @@ import com.pixelmags.android.json.GetIssuesParser;
 import com.pixelmags.android.storage.AllIssuesDataSet;
 import com.pixelmags.android.util.BaseApp;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import okhttp3.FormBody;
 
 //import org.apache.http.NameValuePair;
@@ -29,28 +32,60 @@ public class GetIssues extends WebRequest {
         super(API_NAME);
     }
 
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = BaseApp.getContext().getAssets().open("magazine.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+
+
+
+
+
+
+
     public void init(String magazineID, String appBundleID) {
         mMagazineID = magazineID;
         mAppBundleID = appBundleID;
 
-        setApiNameValuePairs();
-        doPostRequest();
+        //setApiNameValuePairs();
+        //doPostRequest();
 
-        if (responseCode == 200) {
-            getIssuesParserParser = new GetIssuesParser(getAPIResultData());
+        getIssuesParserParser = new GetIssuesParser(loadJSONFromAsset());
+        if (getIssuesParserParser.initJSONParse()) {
+            if (getIssuesParserParser.isSuccess()) {
+                getIssuesParserParser.parse();
+                saveAllIssuesData();
+            } else {
+                Log.e("Issue Parsing Error =========>","Error");
+            }
+
+        }
+
+/*        if (responseCode == 200) {
+            getIssuesParserParser = new GetIssuesParser(loadJSONFromAsset());
             if (getIssuesParserParser.initJSONParse()) {
                 if (getIssuesParserParser.isSuccess()) {
                     getIssuesParserParser.parse();
                     saveAllIssuesData();
-
                 } else {
-
-                    // Add error handling code here
-
+                    Log.e("Issue Parsing Error =========>","Error");
                 }
 
             }
-        }
+        }*/
+
 
     }
 

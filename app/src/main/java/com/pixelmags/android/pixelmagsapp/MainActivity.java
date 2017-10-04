@@ -15,11 +15,18 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
@@ -31,7 +38,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.crashlytics.android.Crashlytics;
 import com.pixelmags.android.api.CanPurchase;
 import com.pixelmags.android.bean.DataTransfer;
@@ -50,6 +56,7 @@ import com.pixelmags.android.storage.MyIssuesDataSet;
 import com.pixelmags.android.storage.MySubscriptionsDataSet;
 import com.pixelmags.android.storage.SubscriptionsDataSet;
 import com.pixelmags.android.storage.UserPrefs;
+import com.pixelmags.android.ui.AboutFragment;
 import com.pixelmags.android.ui.AllIssuesFragment;
 import com.pixelmags.android.ui.LoginFragment;
 import com.pixelmags.android.ui.NavigationDrawerFragment;
@@ -63,17 +70,19 @@ import com.pixelmags.android.util.PMStrictMode;
 import com.pixelmags.android.util.Purchase;
 import com.pixelmags.android.util.SkuDetails;
 import com.pixelmags.android.util.Util;
-
+import com.pixelmags.androidbranded.fragment.ContactandSupportFragment;
+import com.pixelmags.androidbranded.fragment.HomeFragment;
 import java.util.ArrayList;
 import java.util.List;
-
 import io.fabric.sdk.android.Fabric;
 
 /*<<<<<<< Updated upstream*/
 /*>>>>>>> Stashed changes*/
 
-public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, LoginFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener, SubscriptionsFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, LoginFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener, SubscriptionsFragment.OnFragmentInteractionListener {
 
+    NavigationView navigationView;
+    DrawerLayout drawerLayout;
     public IabHelper mHelper;
     public ArrayList<Magazine> billingMagazinesList;
     public ArrayList<Subscription> biilingSubscriptionList;
@@ -246,6 +255,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
                 // Save the Magazine Objects into the SQlite DB
 
+                Log.e("Billing Magazine LIst ==>",billingMagazinesList.size()+"");
+
+
 
 
                 if(billingMagazinesList.size() != 0) {
@@ -259,11 +271,15 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                 }
 
             }
-            AllIssuesFragment issueFragment = (AllIssuesFragment) getSupportFragmentManager().findFragmentByTag("All Issues");
+
+
+
+
+            /*  AllIssuesFragment issueFragment = (AllIssuesFragment) getSupportFragmentManager().findFragmentByTag("All Issues");
             if(issueFragment != null && issueFragment.isVisible()) {
                 issueFragment.updateIssueView();
             }
-
+*/
             if(pixelMagsSubscriptionList != null){
 
                 for (int i = 0; i < pixelMagsSubscriptionList.size(); i++) {
@@ -329,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    //private NavigationDrawerFragment mNavigationDrawerFragment;
     /**
      * The service that will perform all the downloads in the background.
      * This is started whenever the App is launched and within the MainActivity.
@@ -384,125 +400,25 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
     // Till here
 
-    public static boolean isSimSupport(Context context)
-    {
+    public static boolean isSimSupport(Context context) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);  //gets the current TelephonyManager
         return !(tm.getSimState() == TelephonyManager.SIM_STATE_ABSENT);
 
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         // start the service
         startDownloadService();
-
         setContentView(R.layout.activity_main);
-
-        // For testing
-
-//        mServiceConn = new ServiceConnection() {
-//            @Override
-//            public void onServiceDisconnected(ComponentName name) {
-//                mService = null;
-//            }
-//
-//            @Override
-//            public void onServiceConnected(ComponentName name,
-//                                           IBinder service) {
-//                mService = IInAppBillingService.Stub.asInterface(service);
-//            }
-//        };
-//
-//        Log.d(TAG,"mService is : "+mService);
-//
-//        Intent serviceIntent =
-//                new Intent("com.android.vending.billing.InAppBillingService.BIND");
-//        serviceIntent.setPackage("com.android.vending");
-//        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-//
-//
-//        try {
-//
-//            Bundle ownedItems = mService.getPurchases(3, "com.pixelmags.androidbranded.pixelmagsapp.appfive", "inapp", null);
-//
-//            int response = ownedItems.getInt("RESPONSE_CODE");
-//            if (response == 0) {
-//                ArrayList<String> ownedSkus =
-//                        ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-//                ArrayList<String>  purchaseDataList =
-//                        ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-//                ArrayList<String>  signatureList =
-//                        ownedItems.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
-//                String continuationToken =
-//                        ownedItems.getString("INAPP_CONTINUATION_TOKEN");
-//
-//                for (int i = 0; i < purchaseDataList.size(); ++i) {
-//                    String purchaseData = purchaseDataList.get(i);
-//                    String signature = signatureList.get(i);
-//                    String sku = ownedSkus.get(i);
-//
-//
-//                    Log.d(TAG,"User Previous Purchase Data from new method : "+purchaseData);
-//                    Log.d(TAG,"User Previous Purchase Signature from new method : "+signature);
-//                    Log.d(TAG,"User Previous Purchase sku from new method : "+sku);
-//
-//                    // do something with this purchase information
-//                    // e.g. display the updated list of products owned by user
-//                }
-//
-//                // if continuationToken != null, call getPurchases again
-//                // and pass in the token to retrieve more items
-//            }
-//
-//
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
-
-
-        // Till here
-
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-
-
         // setting STRICT DEVELOPER MODE (Disable this for live apps)
         PMStrictMode.setStrictMode(Config.DEVELOPER_MODE);
-
-
         Util.doPreLaunchSteps();
 
-       mHelper = new IabHelper(this, Config.base64EncodedPublicKey);
-
-        // Checking In-app Billing Version 3 API Support
-        mHelper.startSetup(new
-               IabHelper.OnIabSetupFinishedListener()
-               {
-                   public void onIabSetupFinished(IabResult result)
-                   {
-                       if (!result.isSuccess())
-                       {
-                           //failed
-                           Log.d(TAG,"In App Billing setup failed");
-                       }
-                       else
-                       {
-                           //success
-                           Log.d(TAG,"In App Billing setup success");
-                       }
-                   }
-               });
-
+        /*mHelper = new IabHelper(this, Config.base64EncodedPublicKey);
 
         mHelper.startSetup(
                 new IabHelper.OnIabSetupFinishedListener()
@@ -511,12 +427,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
             {
                 if (!result.isSuccess())
                 {
-                    /*Utilities.log("Unable to setup billing: " + result);
-                    isBillingSetup = false;*/
-                } else
-                {
-                    /*Utilities.log("Billing setup successfully");
-                    isBillingSetup = true;*/
+                    *//*Utilities.log("Unable to setup billing: " + result);
+                    isBillingSetup = false;*//*
+                } else {
+                    *//*Utilities.log("Billing setup successfully");
+                    isBillingSetup = true;*//*
                     pixelmagsMagazinesList = null; // clear the list
                     pixelMagsSubscriptionList = null;
 
@@ -545,7 +460,36 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                     mHelper.queryInventoryAsync(true, skuList, mQueryFinishedListener);
                 }
             }
-        });
+        });*/
+
+        setToolMenu();
+        addFragment(R.id.container,new HomeFragment(),"All issues");
+    }
+    public void setToolMenu(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setItemIconTintList(null);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.app_name, R.string.app_name){
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        navigationView.setNavigationItemSelectedListener(this);
+        //calling sync state is necessay or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
     }
 
     @Override
@@ -570,21 +514,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position)
-    {
-        // update the main content by replacing fragments
-
-        Log.e("update the main content by replacing fragments","update the main content by replacing fragments");
-
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
-    }
 
     // set the title based on the menu item
+
+    protected void addFragment(@IdRes int containerViewId, @NonNull Fragment fragment, @NonNull String fragmentTag) {
+        getSupportFragmentManager().beginTransaction().add(containerViewId, fragment, fragmentTag).disallowAddToBackStack().commit();
+    }
     public void onSectionAttached(int number) {
 
         switch (number) {
@@ -736,6 +671,40 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         }
     }
 
+    private void displaySelectedScreen(int itemId) {
+
+        //creating fragment object
+        Fragment fragment = null;
+        switch (itemId) {
+            case R.id.home:
+                fragment = new HomeFragment();
+                break;
+            case R.id.account:
+                fragment = new LoginFragment();
+                break;
+
+            case R.id.About:
+                fragment = new AboutFragment();
+                break;
+
+            case R.id.support:
+                fragment = new ContactandSupportFragment();
+                break;
+
+
+        }
+
+        //replacing the fragment
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container, fragment);
+            ft.commit();
+        }
+
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -763,7 +732,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
     }
 
-    @Override
+  /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
@@ -780,7 +749,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         }
         return super.onCreateOptionsMenu(menu);
     }
-
+*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -956,46 +925,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
     }
 
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        displaySelectedScreen(item.getItemId());
+        return false;
     }
+
+
 
     public class CanPurchaseTask extends AsyncTask<String, String, Boolean> {
 

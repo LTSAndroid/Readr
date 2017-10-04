@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.pixelmags.android.bean.MagazineBeanMain;
 import com.pixelmags.android.datamodels.Magazine;
 import com.pixelmags.android.pixelmagsapp.R;
+import com.pixelmags.android.ui.uicomponents.MultiStateButton;
 import com.pixelmags.androidbranded.bean.RecyclerViewClick;
 import com.pixelmags.androidbranded.download.KittenClickListener;
 import com.squareup.picasso.Picasso;
@@ -46,18 +47,18 @@ public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.Single
 
     @Override
     public void onBindViewHolder(final SingleItemRowHolder holder, final int i) {
-        ViewCompat.setTransitionName(holder.itemImage, String.valueOf(i) + "_image");
-        holder.tvTitle.setText(itemsList.get(i).title);
+     ViewCompat.setTransitionName(holder.imageView, String.valueOf(i) + "_image");
+        holder.issueTitleText.setText(itemsList.get(i).title);
         //holder.download.setText("\\u20B9 "+itemsList.get(i).price);
-        holder.download.setText("\u20B9 "+itemsList.get(i).price);
+        holder.issuePriceButton.setText("\u20B9 "+itemsList.get(i).price);
         final Magazine mag = itemsList.get(i);
 
         Picasso.with(mContext)
                 .load(itemsList.get(i).thumbnailURL)
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder)
-                .into(holder.itemImage);
-        holder.itemImage.setOnClickListener(new View.OnClickListener() {
+                .into(holder.imageView);
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemListener.onKittenClicked((SingleItemRowHolder)holder, i,mag);
@@ -75,28 +76,17 @@ public class MagazineAdapter extends RecyclerView.Adapter<MagazineAdapter.Single
 
     public class SingleItemRowHolder extends RecyclerView.ViewHolder {
 
-        protected TextView tvTitle;
-        public TextView download;
-        public ImageView itemImage;
+        protected TextView issueTitleText;
+        public MultiStateButton issuePriceButton;
+        public ImageView imageView;
 
 
         public SingleItemRowHolder(View view) {
             super(view);
 
-            this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-            this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
-            this.download = (TextView)view.findViewById(R.id.download_issue);
-
-            /* view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-
-                }
-            });*/
-
-
+            this.issueTitleText = (TextView) view.findViewById(R.id.gridTitleText);
+            this.imageView = (ImageView) view.findViewById(R.id.gridImage);
+            this.issuePriceButton = (MultiStateButton)view.findViewById(R.id.gridMultiStateButton);
         }
 
     }

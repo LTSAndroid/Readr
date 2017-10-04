@@ -97,7 +97,7 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
         magazinesList = new ArrayList<>();
         ImageView image = (ImageView) view.findViewById(R.id.detailsimage);
         TextView text = (TextView)view.findViewById(R.id.detailstitle);
-        recyclerViewList = (RecyclerView)view.findViewById(R.id.recycler_view_details);
+        //recyclerViewList = (RecyclerView)view.findViewById(R.id.recycler_view_details);
         Bundle args = getArguments();
         Magazine kittenNumber = args.getParcelable(ARG_KITTEN_NUMBER);
 
@@ -122,7 +122,7 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
 
     }
 
-    public void setAdaptesr(ArrayList<Magazine> beanArrayList){
+  /*  public void setAdaptesr(ArrayList<Magazine> beanArrayList){
         // Log.e("ArraySize",beanArrayList.size()+"");
 
         if(beanArrayList != null) {
@@ -130,7 +130,7 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
             recyclerViewList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
             recyclerViewList.setAdapter(adapterMagazine);
         }
-    }
+    }*/
 
     @Override
     public void onKittenClicked(DetailMagzineAdapter.SingleItemRowHolder holder, int position, Magazine magazine, ArrayList<Magazine> magazineArrayList) {
@@ -376,7 +376,7 @@ public class DetailsFragment extends Fragment implements DownloadInterFace{
         @Override
         protected void onPostExecute(String result) {
             super.onPreExecute();
-            setAdaptesr(beanArrayList);
+           // setAdaptesr(beanArrayList);
 
         }
 

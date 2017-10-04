@@ -103,9 +103,9 @@ public class DetailMagzineAdapter extends RecyclerView.Adapter<DetailMagzineAdap
         public SingleItemRowHolder(View view) {
             super(view);
 
-            this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+           /* this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
             this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
-            this.download = (TextView)view.findViewById(R.id.download_issue);
+            this.download = (TextView)view.findViewById(R.id.download_issue);*/
 
 
            /* view.setOnClickListener(new View.OnClickListener() {

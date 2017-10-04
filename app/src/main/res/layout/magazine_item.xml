@@ -24,7 +24,7 @@
             >
 
             <ImageView
-                android:id="@+id/itemImage"
+                android:id="@+id/gridImage"
                 android:layout_width="100dp"
                 android:layout_height="120dp"
                 android:scaleType="fitXY"
@@ -34,7 +34,7 @@
                 />
 
             <TextView
-                android:id="@+id/tvTitle"
+                android:id="@+id/gridTitleText"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:textColor="#605E5E"
@@ -45,8 +45,8 @@
                 android:typeface="normal"
                 />
 
-            <TextView
-                android:id="@+id/download_issue"
+            <com.pixelmags.android.ui.uicomponents.MultiStateButton
+                android:id="@+id/gridMultiStateButton"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:textColor="#007CFF"

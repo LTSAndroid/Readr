@@ -36,15 +36,12 @@ public class SetUpBillingClass {
                         if (!result.isSuccess()) {
                             Log.e("Post ==","Failure Featured");
                         } else {
-
                             if (from != null) {
-
                                 for (int i = 0; i < from.size(); i++) {
                                     SKU.add(from.get(i).android_store_sku);
                                     Log.e("What is thid ==>", from.get(i).android_store_sku);
 
                                 }
-
                             }
                             mHelper.queryInventoryAsync(true, SKU, new IabHelper.QueryInventoryFinishedListener() {
                                 @Override
